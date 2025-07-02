@@ -1,0 +1,40 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main # 当推送到 main 分支时触发
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest # 使用 Ubuntu 系统运行
+
+    steps:
+      # Step 1: 拉取代码
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: 设置 Node.js 环境（如果你是前端项目）
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22" # 使用 Node.js 22.x
+
+      # Step 3: 安装依赖
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: 执行打包命令
+      - name: Build project
+        run: npm run build # 根据你的项目修改为 yarn build 或其他命令
+
+      # Step 5: 设置 SSH 私钥（用于连接服务器）
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }} # 引用你在 GitHub Secrets 中设置的私钥
+
+      # Step 6: 将打包好的 dist 目录上传到服务器
+      - name: Upload files via rsync
+        run: |
+          rsync -avz --delete ./dist/ ${{ secrets.SSH_HOST }}:/var/www/my-site/
