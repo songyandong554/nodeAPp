@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <h1>欢迎来到首页{{ test.message }}</h1>
-    <p>这是一个使用 Vue 3 + TypeScript + Vite 构建的应用</p>
+    <p>这是一个使用2222222222222222222ue 3 + TypeScript + Vite 构建的应用</p>
 
     <div class="navigation">
       <router-link to="/about" class="nav-link">关于我们</router-link>
